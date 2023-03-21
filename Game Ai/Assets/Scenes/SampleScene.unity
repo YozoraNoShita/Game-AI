@@ -865,6 +865,7 @@ MonoBehaviour:
   currentDialogIndex: -1
   currentSpeakerIndex: 0
   typingSpeed: 0.1
+  entity_dialogue: {fileID: 0}
 --- !u!4 &1633167752
 Transform:
   m_ObjectHideFlags: 0

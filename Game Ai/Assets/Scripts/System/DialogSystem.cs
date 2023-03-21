@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;                   //UI 를 컨트롤 할 것이라서 추가
-using System;                           //Arrary 수정 기능을 사용 하기 위해 추가 
+using UnityEngine.UI;                   // UI 를 컨트롤 할 것이라서 추가
+using System;                           // Array 수정 기능을 사용 하기 위해 추가 
 
 public class DialogSystem : MonoBehaviour
 {
@@ -17,12 +17,34 @@ public class DialogSystem : MonoBehaviour
 
     public int currentDialogIndex = -1;
     public int currentSpeakerIndex = 0;
-    public float typingSpeed = 0.1f;        //해당 시간동안 멈췄다가 글씨가 나타남 
-    private bool isTypingEffect = false;    //재생중인지 판단 FLAG
+    public float typingSpeed = 0.1f;        // 해당 시간동안 멈췄다가 글씨가 나타남 
+    private bool isTypingEffect = false;    // 재생중인지 판단 FLAG
+
+    public Entity_Dialogue entity_dialogue;   // XLS로 들어온 데이터
 
     private void Awake()
     {
         SetAllClose();
+        if(dialogsDB)                       // 데이터를 읽기로 함.
+        {
+            Array.Clear(dialogs, 0, dialogs.Length);      // 기존 dialogs 지움
+            Array.Resize(ref dialogs, entity_dialogue.sheets[0].list.Count);
+
+            int ArraryCursor = 0;
+
+            foreach(Entity_Dialogue.Param param in entity_dialogue.sheets[0].list)
+            {
+                dialogs[ArraryCursor].index = param.index;
+                dialogs[ArraryCursor].speakerUIindex = param.speakerUIindex;
+                dialogs[ArraryCursor].name = param.name;
+                dialogs[ArraryCursor].dialogue = param.dialogue;
+                dialogs[ArraryCursor].characterPath = param.characterPath;
+                dialogs[ArraryCursor].tweenType = param.tweenType;
+                dialogs[ArraryCursor].nextindex = param.nextindex;
+
+                ArraryCursor += 1;
+            }
+        }
     }
 
     public bool UpdateDialog(int currentIndex, bool InitType)
