@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class FOVSystem : MonoBehaviour
 {
-    public float viewRadius;
-    public float viewAngle;
+    public float viewRadius;            // 시야 거리
+    public float viewAngle;             // 시야 각
 
-    public LayerMask targetMask;
-    public LayerMask obstacleMask;
+    public LayerMask targetMask;        // Target 레이어에서 가져옴
+    public LayerMask obstacleMask;      // oibstacleMask 레이어에서 가져옴
 
-    public List<Transform> visibleTargets = new List<Transform>();
+    public List<Transform> visibleTargets = new List<Transform>();                  // 보이는 타겟 리스트
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         StartCoroutine("FindTargetsWithDelay", 0.2f);
     }
@@ -26,9 +26,10 @@ public class FOVSystem : MonoBehaviour
             FindVisibleTargets();
         }
     }
+
     void FindVisibleTargets()
     {
-        visibleTargetColor(Color.white);
+        visibleTartgetColor(Color.white);
         visibleTargets.Clear();
 
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
@@ -38,40 +39,31 @@ public class FOVSystem : MonoBehaviour
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 float dstToTarget = Vector3.Distance(transform.position, target.position);
 
-                if(!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
                     visibleTargets.Add(target);
                 }
             }
         }
-
-        visibleTargetColor(Color.green);
+        visibleTartgetColor(Color.green);
     }
 
-    // Update is called once per frame
-    void Update()
+    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
     {
-        
-    }
-
-    
-    public Vector3 DirFromAngle(float angleinDegress, bool anglesGlobal)
-    {
-        if(!anglesGlobal)
+        if (!angleIsGlobal)
         {
-            angleinDegress += transform.eulerAngles.y;
+            angleInDegrees += transform.eulerAngles.y;
         }
-
-        return new Vector3(Mathf.Sin(angleinDegress * Mathf.Deg2Rad), 0, Mathf.Cos(angleinDegress * Mathf.Deg2Rad));
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
-    void visibleTargetColor(Color color)
+    void visibleTartgetColor(Color color)
     {
-        for(int i = 0; i < visibleTargets.Count; i++)
+        for (int i = 0; i < visibleTargets.Count; i++)
         {
             visibleTargets[i].GetComponent<Renderer>().material.SetColor("_Color", color);
         }

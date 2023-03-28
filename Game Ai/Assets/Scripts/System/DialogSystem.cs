@@ -79,7 +79,6 @@ public class DialogSystem : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 
@@ -101,7 +100,6 @@ public class DialogSystem : MonoBehaviour
             color.a = 0.2f;
         }
         speaker.imgCharacter.color = color;
-
     }
 
     private void SetAllClose()
@@ -120,7 +118,6 @@ public class DialogSystem : MonoBehaviour
 
         speakers[currentSpeakerIndex].textName.text = dialogs[currentDialogIndex].name;
         StartCoroutine("OnTypingText");
-
     }
 
     private IEnumerator OnTypingText()
@@ -141,7 +138,6 @@ public class DialogSystem : MonoBehaviour
             index++;
             yield return new WaitForSeconds(typingSpeed);
         }
-
         isTypingEffect = false;
 
         speakers[currentSpeakerIndex].objectArrow.SetActive(true);
@@ -169,5 +165,5 @@ public struct DialogData
     public int tweenType;
     public int nextindex;
 
-    //추가로 원하는대로 데이터를 입력 할 수 있음 
+    // 추가로 원하는대로 데이터를 입력 할 수 있음 
 }
